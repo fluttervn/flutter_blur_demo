@@ -101,6 +101,8 @@ class _BlurMultipleDynamicRegionPageState
           left: 0,
           width: _blurWidth,
           height: _blurHeight,
+          // Note: without ClipRect, the blur region will be expanded to full
+          // size of the Image instead of custom size
           child: ClipRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
