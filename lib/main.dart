@@ -1,7 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+
+import 'blur_multiple_widgets.dart';
+import 'blur_multiple_with_dynamic_region.dart';
+import 'blur_single_image.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,98 +20,42 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+/// List of <screen name, widget name>
+final Map<String, Widget> mapScreens = {
+  'Blur single image or decoration': BlurSingleImagePage(),
+  'Blur multiple widgets': BlurMultipleWidgetsPage(),
+  'Blur multiple widgets with dynamic region': BlurMultipleDynamicRegionPage(),
+};
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _imageIndex = 0;
-  double _sigmaX = 0.0;
-  double _sigmaY = 0.0;
-  double _opacity = 0.0;
-  final images = ["background1.jpg", "background2.jpg", "background3.jpg"];
-
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('rebuild with sigmaX=$_sigmaX, sigmaY=$_sigmaY, opacity=$_opacity');
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter blur demo'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Image.asset(
-                  'assets/images/${images[_imageIndex]}',
-                  width: 300,
-                  height: 250,
-                  fit: BoxFit.cover,
-                ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
-                  child: Container(
-                    width: 300,
-                    height: 250,
-                    color: Colors.black.withOpacity(_opacity),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20),
-            RaisedButton(
-              child: Text('Next image'),
-              onPressed: () {
-                setState(() {
-                  _imageIndex = (_imageIndex + 1) % images.length;
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            Text('Change blur sigmaX: ${_sigmaX.toStringAsFixed(2)}'),
-            Slider(
-              min: 0,
-              max: 10,
-              value: _sigmaX,
-              label: '$_sigmaX',
-              onChanged: (value) {
-                setState(() {
-                  _sigmaX = value;
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            Text('Change blur sigmaY: ${_sigmaY.toStringAsFixed(2)}'),
-            Slider(
-              min: 0,
-              max: 10,
-              value: _sigmaY,
-              onChanged: (value) {
-                setState(() {
-                  _sigmaY = value;
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            Text('Change blur opacity: ${_opacity.toStringAsFixed(2)}'),
-            Slider(
-              min: 0,
-              max: 1,
-              value: _opacity,
-              onChanged: (value) {
-                setState(() {
-                  _opacity = value;
-                });
-              },
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: mapScreens.length,
+        itemBuilder: (BuildContext context, int index) {
+          final title = mapScreens.keys.elementAt(index);
+          return ListTile(
+            title: Text(title, style: TextStyle(fontSize: 16)),
+            trailing: Icon(Icons.navigate_next),
+            onTap: () {
+              _gotoScreen(context, mapScreens[title]);
+            },
+          );
+        },
+        padding: EdgeInsets.all(10),
       ),
+    );
+  }
+
+  /// Go to destination screen (widget)
+  _gotoScreen(BuildContext context, Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<Widget>(builder: (context) => screen),
     );
   }
 }
