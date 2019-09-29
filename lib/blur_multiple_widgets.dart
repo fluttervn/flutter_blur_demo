@@ -82,10 +82,14 @@ class _BlurMultipleWidgetsState extends State<BlurMultipleWidgetsPage> {
           fit: BoxFit.cover,
         ),
         FlutterLogo(size: 80, colors: Colors.red),
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
-          child: Container(
-            color: Colors.black.withOpacity(_opacity),
+        Container(
+          width: _width,
+          height: _height,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
+            child: Container(
+              color: Colors.black.withOpacity(_opacity),
+            ),
           ),
         )
       ],

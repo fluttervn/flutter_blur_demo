@@ -60,7 +60,7 @@ class _BlurMultipleDynamicRegionPageState
         'blur H=${_blurHeight.toInt()}');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter blur demo'),
+        title: Text('Blur multiple widgets with dynamic region'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
